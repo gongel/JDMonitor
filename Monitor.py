@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import json
 import time
 import bs4
@@ -148,7 +149,7 @@ class Monitor():
                     mail.SendMailMessage(content)
                     self.notify += 1
 
-                if not self.price==None:
+                if self.price==None:
                     content="监控的商品已有货，详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
                     mail.SendMailMessage(content)
                     self.notify+=1
