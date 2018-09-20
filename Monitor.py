@@ -143,15 +143,19 @@ class Monitor():
             good_data['stock'], good_data['stockName'] = self.good_stock()
             # stock_str = u'有货' if good_data['stock'] == 33 else u'无货'
             if good_data['stock']==33:
-                if self.price != None and float(good_data['price'])<float(self.price):
+                if self.price!=None and float(good_data['price'])<float(self.price):
                     content="监控的商品已降价（有货），详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
-                else:
+                    mail.SendMailMessage(content)
+                    self.notify += 1
+
+                if not self.price==None:
                     content="监控的商品已有货，详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
-                mail.SendMailMessage(content)
-                self.notify+=1
+                    mail.SendMailMessage(content)
+                    self.notify+=1
+
     def good_detail_loop(self):
-        while self.notify<3:
+        while self.notify<1:
             self.good_detail()
-            time.sleep(self.clock) #每5秒钟监控一次；有货的话仅通知三次，无货已知监控
+            time.sleep(self.clock) #每clock秒钟监控一次；有货的话仅通知三次，无货继续监控
 
 #area_id='2_2830_51800_0' 上海浦东新区
