@@ -142,17 +142,20 @@ class Monitor():
 
             # good stock
             good_data['stock'], good_data['stockName'] = self.good_stock()
-            # stock_str = u'有货' if good_data['stock'] == 33 else u'无货'
-            if good_data['stock']==33:
-                if self.price!=None and float(good_data['price'])<float(self.price):
-                    content="监控的商品已降价（有货），详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
-                    mail.SendMailMessage(content)
-                    self.notify += 1
+            # stock_str = u'现货' if good_data['stock'] == 33
+            # stock_str=u'无货' if good_data['stock'] == 34
+            # stock_str=u'可配货' if good_data['stock'] == 40
+            # stock_str=u'采购中' if good_data['stock'] == 36
+            if good_data['stock']==33 or good_data['stock']==40:
+                    if self.price!=None and float(good_data['price'])<float(self.price):
+                        content="监控的商品已降价（有货），详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
+                        mail.SendMailMessage(content)
+                        self.notify += 1
 
-                if self.price==None:
-                    content="监控的商品已有货，详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
-                    mail.SendMailMessage(content)
-                    self.notify+=1
+                    if self.price==None:
+                        content="监控的商品已有货，详情如下：\n编号：{}\n名称：{}\n库存：{}\n价格：{}\n时间：{}\n链接：{}\n".format(good_data['id'],good_data['name'],good_data['stockName'],good_data['price'],time.ctime(),stock_link)
+                        mail.SendMailMessage(content)
+                        self.notify+=1
 
     def good_detail_loop(self):
         while self.notify<1:
